@@ -158,6 +158,8 @@ def get_basename(filename: str):
         filename = filename[:filename.find("_Construction")]
     elif "Construction" in filename:
         filename = filename[:filename.find("Construction")]
+    elif "Construction_" in filename:
+        filename = filename[:filename.find("Construction_")]
     elif "_BS" in filename:
         filename = filename[:filename.find("_BS")]
 
