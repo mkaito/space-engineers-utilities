@@ -90,6 +90,7 @@ warnings = {
     'W018': "Nonstandard bones detected: {variable_1}. You may need to alter the Animation Controller for them to work as intended.",
     'W019': "Material '{variable_1}' has a linked '{variable_2}'-texture but the material technique '{variable_3}' does not support it.",
     'W020': "Scene '{variable_1}' is set to a different grid size than its export size and contains a subpart empty '{variable_2}'. Subpart empties do not support export to a different grid size.",
+    'W021': "Material '{variable_1}' could not be prepared for export.",
 }
 
 infos = {
@@ -115,6 +116,7 @@ infos = {
     'I020': "The import of {variable_1} materials was skipped because they already exist in the BLEND file: {variable_2}",
     'I021': "{variable_1} of {variable_2} files successfully imported. Refer to Blender System Console for details.",
     'I022': "Export of collision collection '{variable_1}' was skipped because the collection is not attached to the main or a BS collection.",
+    'I023': "Material '{variable_1}' was ",
 }
 
 

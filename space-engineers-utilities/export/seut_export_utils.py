@@ -442,6 +442,8 @@ def prepare_mat_for_export(self, context, material):
     if material is None:
         return
 
+    mat_name = str(material.name)
+
     if material.library:
 
         if material.library.is_missing:
@@ -467,7 +469,8 @@ def prepare_mat_for_export(self, context, material):
 
         material = material.override_create(remap_local_usages=True)
 
-    if material.node_tree is None:
+    if material is None or material.node_tree is None:
+        seut_report(self, context, 'WARNING', False, 'W021', mat_name)
         return
 
     # See if relevant nodes already exist
