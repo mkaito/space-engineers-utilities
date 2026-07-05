@@ -568,6 +568,9 @@ class SEUT_OT_Planet_Bake(Operator):
             if scene.seut.planet is None or scene.seut.planet_preview is None:
                 Operator.poll_message_set("Bake source or bake target are missing.")
                 return False
+            if not context.mode == 'OBJECT':
+                Operator.poll_message_set("Must be in object mode.")
+                return False
             return True
 
 
