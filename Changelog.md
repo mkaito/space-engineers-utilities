@@ -2,7 +2,10 @@ Relevant Milestone: [SEUT 1.2.2](https://github.com/enenra/space-engineers-utili
 
 # Changelog
 
+* Added: W021 for when a material could not be prepared for export. (Alpha 3)
 * Added: Planet Editor - support for Weather Generators, Cloud Layers and Sound Rules. (Alpha 2)
+* Improved: Added support for additional file naming convention to Complete Import. (Alpha 3)
+* Improved: Additional safeties for Icon Render and Planet Editor. (Alpha 3)
 * Improved: Added Error E56 for when a data block is linked into the active file but the original file is unavailable. (Alpha 2)
 * Improved: Path handling for simultaneous SG / LG export. (Alpha 2)
 * Improved: General Planet Editor improvements. (Alpha 2)
