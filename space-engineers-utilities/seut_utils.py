@@ -232,7 +232,7 @@ def prep_context(context):
 def clear_selection(context):
     """Deselects object and sets active object to None."""
 
-    if context.object is not None:
+    if context is not None and context.object is not None:
         context.object.select_set(False)
         context.view_layer.objects.active = None
 
