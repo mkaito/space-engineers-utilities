@@ -276,6 +276,11 @@ def export_hkt(self, context):
             if col.seut.hkt_file != "":
                 ext_hkt_path = get_abs_path(col.seut.hkt_file)
                 if os.path.exists(ext_hkt_path):
+                    if len(col.objects) > 0:
+                        seut_report(self, context, 'ERROR', True, 'E055', col.name)
+                        cancelled = True
+                        break
+
                     shutil.copyfile(ext_hkt_path, join(path, f"{get_col_filename(col)}.hkt"))
                 else:
                     seut_report(self, context, 'ERROR', True, 'E003', f"External Collision (set in Collision collection '{col.name}') file", ext_hkt_path)

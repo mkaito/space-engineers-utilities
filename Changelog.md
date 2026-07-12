@@ -2,6 +2,7 @@ Relevant Milestone: [SEUT 1.2.2](https://github.com/enenra/space-engineers-utili
 
 # Changelog
 
+* Added: E055 for when both an external collision file is set and collison objects exist in the collision collection. (Alpha 4)
 * Added: W021 for when a material could not be prepared for export. (Alpha 3)
 * Added: Planet Editor - support for Weather Generators, Cloud Layers and Sound Rules. (Alpha 2)
 * Improved: Added support for additional file naming convention to Complete Import. (Alpha 3)
