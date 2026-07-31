@@ -118,24 +118,24 @@ class SEUT_OT_MassConvertTextures(Operator):
         target_dir = os.path.join(preferences.asset_path, 'Textures')
 
         dirs_to_convert = [
-            "Models\\Cubes",
-            "Models\\Cubes\\armor",
-            "Models\\Cubes\\Damaged",
-            "Models\\Cubes\\lods",
-            "Models\\Physical_item",
-            "Models\\Debris",
-            "Models\\Characters\\Astronaut",
-            "Models\\Characters\\Plushie",
-            "Models\\Characters\\SabiroidPlushie",
-            "Models\\Environment\\Bushes",
-            "Models\\Environment\\Grass",
-            "Models\\Environment\\Trees",
-            "Models\\Environment\\Props",
-            "Models\\Environment\\SafeZone",
-            "Models\\Environment\\Farming",
-            "Models\\Environment\\Terrain",
-            "Models\\Weapons",
-            "Models\\Debug",
+            "Models/Cubes",
+            "Models/Cubes/armor",
+            "Models/Cubes/Damaged",
+            "Models/Cubes/lods",
+            "Models/Physical_item",
+            "Models/Debris",
+            "Models/Characters/Astronaut",
+            "Models/Characters/Plushie",
+            "Models/Characters/SabiroidPlushie",
+            "Models/Environment/Bushes",
+            "Models/Environment/Grass",
+            "Models/Environment/Trees",
+            "Models/Environment/Props",
+            "Models/Environment/SafeZone",
+            "Models/Environment/Farming",
+            "Models/Environment/Terrain",
+            "Models/Weapons",
+            "Models/Debug",
             "Particles"
         ]
 
@@ -179,7 +179,7 @@ def mass_convert_textures(self, context, dirs: list, target_dir: str, preset: st
                     if skip:
                         continue
 
-                if target_dir.find('\Textures\\') == -1 and not target_dir.endswith('\Textures'):
+                if target_dir.find(os.sep + 'Textures' + os.sep) == -1 and not target_dir.endswith(os.sep + 'Textures'):
                     target = os.path.join(target_dir, os.path.splitext(file)[0] + '.' + output_type.lower())
                 else:
                     target = os.path.join(os.path.dirname(target_dir), create_relative_path(tex_dir, 'Textures'), os.path.splitext(file)[0] + '.' + output_type.lower())

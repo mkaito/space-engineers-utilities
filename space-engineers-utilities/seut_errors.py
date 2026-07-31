@@ -139,7 +139,7 @@ def check_export(self, context, can_report=True):
         seut_report(self, context, 'ERROR', can_report, 'E045', get_abs_path(scene.seut.mod_path))
         return {'CANCELLED'}
 
-    if path.find("Models\\") != -1 or (path + "\\").find("Models\\") != -1:
+    if path.find("Models" + os.sep) != -1 or (path + os.sep).find("Models" + os.sep) != -1:
         pass
     else:
         seut_report(self, context, 'ERROR', can_report, 'E014', path, scene.name)
@@ -299,6 +299,7 @@ def check_weights(context, obj):
 def get_abs_path(path: str) -> str:
     """Returns the absolute path"""
 
+    path = os.path.expanduser(path)
     if bpy.path.abspath(path) == "":
         return ""
     else:
@@ -425,14 +426,18 @@ def init_logging():
 
 def anonymize_paths(message):
 
-    if "\\Users\\" in message:
-        start = message.find("\\Users\\") + len("\\Users\\")
-        cut = message[message.find("\\Users\\") + len("\\Users\\"):]
-        end = cut.find("\\") + start
+    # Windows (\Users\), wine tool output (\home\), native Linux (/home/)
+    for marker, sep in (("\\Users\\", "\\"), ("\\home\\", "\\"), ("/home/", "/")):
+        if marker not in message:
+            continue
+
+        start = message.find(marker) + len(marker)
+        cut = message[start:]
+        end = cut.find(sep) + start
         username = message[start:end]
 
         if username == "":
-            return message
+            continue
 
         while username in message:
             message = message.replace(username, "SEUT-USER")

@@ -60,7 +60,7 @@ def update_game_path(self, context):
             self.game_path = ""
     else:
         if os.path.basename(os.path.dirname(path)) == 'SpaceEngineers':
-          self.game_path = os.path.dirname(path) + '\\'
+          self.game_path = os.path.dirname(path) + os.sep
         else:
           seut_report(self, context, 'ERROR', False, 'E003', 'SpaceEngineers', path)
           self.game_path = ""

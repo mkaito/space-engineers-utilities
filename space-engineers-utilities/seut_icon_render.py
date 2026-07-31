@@ -141,7 +141,7 @@ class SEUT_OT_IconRenderPreview(Operator):
 
     @classmethod
     def poll(cls, context):
-        if context.scene.render.filepath == '/tmp\\':
+        if context.scene.render.filepath in ('/tmp\\', '/tmp/'):
             Operator.poll_message_set("A render folder must first be defined.")
             return False
 
@@ -195,7 +195,7 @@ class SEUT_OT_IconRenderPreview(Operator):
         file_format = scene.seut.render_output_type.lower()
         if file_format == 'dds':
             file_format = 'png'
-        scene.render.filepath = get_abs_path(scene.render.filepath) + "\\" + scene.seut.subtypeId + '.' + file_format
+        scene.render.filepath = os.path.join(get_abs_path(scene.render.filepath), scene.seut.subtypeId + '.' + file_format)
 
         bpy.ops.render.render()
         bpy.ops.render.view_show('INVOKE_DEFAULT')
