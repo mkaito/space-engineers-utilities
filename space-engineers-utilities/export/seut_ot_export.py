@@ -82,6 +82,12 @@ def export(self, context, export_materials=True):
     if not os.path.exists(get_abs_path(scene.seut.export_exportPath)):
         os.makedirs(get_abs_path(scene.seut.export_exportPath))
 
+    # Check for wine availability
+    result = check_wine(self, context)
+    if not result == {'CONTINUE'}:
+        scene.seut.linkSubpartInstances = subparts
+        return result
+
     # Check for availability of FBX Importer
     result = check_toolpath(self, context, os.path.join(get_tool_dir(), 'FBXImporter.exe'), "Custom FBX Importer", "FBXImporter.exe")
     if not result == {'CONTINUE'}:

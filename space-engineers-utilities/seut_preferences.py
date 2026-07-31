@@ -8,6 +8,7 @@ from bpy.types  import Operator, AddonPreferences
 from bpy.props  import BoolProperty, StringProperty, EnumProperty, IntProperty
 
 from .utils.seut_repositories       import *
+from .utils.seut_paths              import is_linux
 from .seut_errors                   import seut_report, get_abs_path
 from .seut_utils                    import get_preferences, get_addon, get_seut_blend_data, wrap_text
 from .seut_bau                      import draw_bau_ui, get_config, set_config
@@ -200,6 +201,18 @@ class SEUT_AddonPreferences(AddonPreferences):
         name="MWM Builder",
         description="This tool converts the individual 'loose files' that the export yields into MWM files the game can read",
         subtype='FILE_PATH',
+        options={'PATH_SUPPORTS_BLEND_RELATIVE'}
+    )
+    wine_path: StringProperty(
+        name="Wine Binary",
+        description="Path to the wine binary used to run the Windows export tools on non-Windows platforms",
+        default="wine",
+        subtype='FILE_PATH'
+    )
+    wineprefix_path: StringProperty(
+        name="Wine Prefix",
+        description="WINEPREFIX directory containing the export tools' dependencies",
+        subtype='DIR_PATH',
         options={'PATH_SUPPORTS_BLEND_RELATIVE'}
     )
     quick_tools: BoolProperty(
@@ -403,6 +416,9 @@ class SEUT_AddonPreferences(AddonPreferences):
         box = layout.box()
         box.label(text="External Tools", icon='TOOL_SETTINGS')
         box.prop(self, "havok_path", text="Havok Filter Manager", expand=True)
+        if is_linux():
+            box.prop(self, "wine_path", text="Wine Binary", expand=True)
+            box.prop(self, "wineprefix_path", text="Wine Prefix", expand=True)
 
         box0 = layout.box()
         box0.label(text="SEUT Panels", icon="META_PLANE")

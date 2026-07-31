@@ -6,7 +6,7 @@ from bpy.types      import Operator
 
 from .materials.seut_ot_texture_conversion  import convert_texture
 from .seut_collections                      import get_collections, create_seut_collection
-from .seut_errors                           import check_collection, check_collection_excluded, seut_report, get_abs_path
+from .seut_errors                           import check_collection, check_collection_excluded, seut_report, get_abs_path, check_wine
 from .seut_utils                            import to_radians, clear_selection, prep_context, seut_report, get_seut_blend_data, link_node_tree
 
 
@@ -149,6 +149,10 @@ class SEUT_OT_IconRenderPreview(Operator):
 
 
     def execute(self, context):
+
+        result = check_wine(self, context)
+        if result != {'CONTINUE'}:
+            return result
 
         scene = context.scene
         data = get_seut_blend_data()

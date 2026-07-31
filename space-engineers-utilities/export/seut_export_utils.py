@@ -13,8 +13,8 @@ from bpy_extras.io_utils                    import axis_conversion, ExportHelper
 
 from ..importing.seut_ot_import             import import_fbx
 from ..materials.seut_ot_remap_materials    import remap_materials
-from ..utils.seut_tool_utils                import get_tool_dir
-from ..utils.seut_paths                     import to_content_path
+from ..utils.seut_tool_utils                import get_tool_dir, wrap_cmdline, wine_env
+from ..utils.seut_paths                     import to_content_path, is_windows
 from ..seut_collections                     import get_collections, get_rev_ref_cols
 from ..seut_utils                           import *
 from ..seut_errors                          import seut_report, get_abs_path
@@ -756,7 +756,7 @@ class ExportSettings:
 
     def callTool(self, context, cmdline, tooltype, logfile=None, cwd=None, successfulExitCodes=[0], loglines=[], logtextInspector=None):
         try:
-            out = subprocess.check_output(cmdline, cwd=cwd, stderr=subprocess.STDOUT, shell=True)
+            out = subprocess.check_output(wrap_cmdline(cmdline), cwd=cwd, stderr=subprocess.STDOUT, shell=is_windows(), env=wine_env())
             if self.isLogToolOutput and logfile:
                 write_to_log(logfile, out, cmdline=cmdline, cwd=cwd, loglines=loglines)
             if logtextInspector is not None:

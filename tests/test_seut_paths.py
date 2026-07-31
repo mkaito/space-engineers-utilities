@@ -11,6 +11,8 @@ _spec.loader.exec_module(seut_paths)
 
 relative_from_folder = seut_paths.relative_from_folder
 to_content_path = seut_paths.to_content_path
+to_tool_path = seut_paths.to_tool_path
+is_linux = seut_paths.is_linux
 
 
 def test_relative_from_folder_midpath_unix():
@@ -51,3 +53,31 @@ def test_to_content_path_from_windows_noop():
 
 def test_to_content_path_default_sep():
     assert to_content_path(os.sep.join(['a', 'b', 'c'])) == 'a\\b\\c'
+
+
+def test_to_tool_path_non_linux_identity():
+    assert to_tool_path('C:\\mod\\x.fbx', linux=False) == 'C:\\mod\\x.fbx'
+
+
+def test_to_tool_path_linux_z_drive():
+    assert to_tool_path('/home/u/x.fbx', linux=True) == 'Z:\\home\\u\\x.fbx'
+
+
+def test_to_tool_path_linux_nested():
+    assert to_tool_path('/a/b/c/d.hkt', linux=True) == 'Z:\\a\\b\\c\\d.hkt'
+
+
+def test_to_tool_path_linux_rejects_relative():
+    try:
+        to_tool_path('rel/path.fbx', linux=True)
+    except ValueError:
+        return
+    raise AssertionError('expected ValueError for relative path on linux')
+
+
+def test_to_tool_path_non_linux_allows_relative():
+    assert to_tool_path('rel/path.fbx', linux=False) == 'rel/path.fbx'
+
+
+def test_is_linux_returns_bool():
+    assert isinstance(is_linux(), bool)
