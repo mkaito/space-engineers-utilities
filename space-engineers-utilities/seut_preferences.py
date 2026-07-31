@@ -2,6 +2,7 @@ import bpy
 import os
 import sys
 import json
+import shutil
 import addon_utils
 
 from bpy.types  import Operator, AddonPreferences
@@ -9,6 +10,7 @@ from bpy.props  import BoolProperty, StringProperty, EnumProperty, IntProperty
 
 from .utils.seut_repositories       import *
 from .utils.seut_paths              import is_linux
+from .utils.seut_tool_utils         import get_tool_dir
 from .seut_errors                   import seut_report, get_abs_path
 from .seut_utils                    import get_preferences, get_addon, get_seut_blend_data, wrap_text
 from .seut_bau                      import draw_bau_ui, get_config, set_config
@@ -165,6 +167,17 @@ def update_havok_path(self, context):
     save_addon_prefs()
 
 
+def update_wineprefix_path(self, context):
+    if not is_linux() or self.wineprefix_path == "":
+        return
+
+    # Havok is extracted into the prefix; offer its default location if unset
+    if self.havok_path == "":
+        self.havok_path = os.path.join(get_abs_path(self.wineprefix_path), 'drive_c', 'Havok', 'HavokContentTools', 'hctStandAloneFilterManager.exe')
+
+    save_addon_prefs()
+
+
 class SEUT_AddonPreferences(AddonPreferences):
     """Saves the preferences set by the user"""
     bl_idname = __package__
@@ -212,8 +225,10 @@ class SEUT_AddonPreferences(AddonPreferences):
     wineprefix_path: StringProperty(
         name="Wine Prefix",
         description="WINEPREFIX directory containing the export tools' dependencies",
+        default="~/.local/share/seut-wine",
         subtype='DIR_PATH',
-        options={'PATH_SUPPORTS_BLEND_RELATIVE'}
+        options={'PATH_SUPPORTS_BLEND_RELATIVE'},
+        update=update_wineprefix_path
     )
     quick_tools: BoolProperty(
         name="Quick Tools",
@@ -419,6 +434,36 @@ class SEUT_AddonPreferences(AddonPreferences):
         if is_linux():
             box.prop(self, "wine_path", text="Wine Binary", expand=True)
             box.prop(self, "wineprefix_path", text="Wine Prefix", expand=True)
+
+            wine = self.wine_path
+            prefix = get_abs_path(self.wineprefix_path)
+            gltf = os.path.join(get_tool_dir(), 'FBX2glTF-linux-x64')
+
+            row_checks = [
+                ("Wine binary",
+                 bool(shutil.which(wine) or (wine and os.path.isfile(wine))),
+                 "Wine binary found.", "Wine binary not found."),
+                ("Wine prefix",
+                 self.wineprefix_path != "" and os.path.isdir(os.path.join(prefix, 'drive_c')),
+                 "Wine prefix ready.", "Wine prefix not set or not initialised."),
+                ("Havok Filter Manager",
+                 self.havok_path != "" and os.path.basename(self.havok_path) == 'hctStandAloneFilterManager.exe' and os.path.exists(get_abs_path(self.havok_path)),
+                 "Havok Filter Manager found.", "Havok Filter Manager not found."),
+                ("MWM Builder",
+                 self.mwmb_path != "" and os.path.exists(get_abs_path(self.mwmb_path)),
+                 "MWM Builder found.", "MWM Builder not installed."),
+                ("FBX2glTF",
+                 os.path.exists(gltf) and os.access(gltf, os.X_OK),
+                 "FBX2glTF ready.", "FBX2glTF missing or not executable."),
+            ]
+
+            for name, ok, msg_ok, msg_bad in row_checks:
+                box2 = box.box()
+                row = box2.row(align=True)
+                row.alert = not ok
+                split = row.split(factor=0.30)
+                split.label(text=f"{name}:", icon='TOOL_SETTINGS')
+                split.label(text=msg_ok if ok else msg_bad, icon='CHECKMARK' if ok else 'ERROR')
 
         box0 = layout.box()
         box0.label(text="SEUT Panels", icon="META_PLANE")
