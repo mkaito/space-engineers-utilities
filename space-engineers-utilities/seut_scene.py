@@ -211,15 +211,40 @@ def update_renderDistance(self, context):
 
     if 'Key Light' in bpy.data.objects:
         key_light = bpy.data.objects['Key Light']
-        key_light.data.energy = 7500.0 * scene.seut.renderDistance
+        if self.icon_key_light == 7500.0:
+            key_light.data.energy = 7500.0 * scene.seut.renderDistance
+            if self.icon_key_light != 7500.0 * scene.seut.renderDistance:
+                self.icon_key_light = 7500.0 * scene.seut.renderDistance
 
     if 'Fill Light' in bpy.data.objects:
         fill_light = bpy.data.objects['Fill Light']
-        fill_light.data.energy = 5000.0 * scene.seut.renderDistance
+        if self.icon_fill_light == 5000.0:
+            fill_light.data.energy = 5000.0 * scene.seut.renderDistance
+            if self.icon_fill_light != 5000.0 * scene.seut.renderDistance:
+                self.icon_fill_light = 5000.0 * scene.seut.renderDistance
 
     if 'Rim Light' in bpy.data.objects:
         rim_light = bpy.data.objects['Rim Light']
-        rim_light.data.energy = 10000.0 * scene.seut.renderDistance
+        if self.icon_rim_light == 10000.0:
+            rim_light.data.energy = 10000.0 * scene.seut.renderDistance
+            if self.icon_rim_light != 10000.0 * scene.seut.renderDistance:
+                self.icon_rim_light = 10000.0 * scene.seut.renderDistance
+
+
+def update_light_power(self, context):
+    scene = context.scene
+
+    if 'Key Light' in bpy.data.objects:
+        key_light = bpy.data.objects['Key Light']
+        key_light.data.energy = self.icon_key_light
+
+    if 'Fill Light' in bpy.data.objects:
+        fill_light = bpy.data.objects['Fill Light']
+        fill_light.data.energy = self.icon_fill_light
+
+    if 'Rim Light' in bpy.data.objects:
+        rim_light = bpy.data.objects['Rim Light']
+        rim_light.data.energy = self.icon_rim_light
 
 
 def update_subtypeId(self, context):
@@ -805,6 +830,27 @@ class SEUT_Scene(PropertyGroup):
         min=0,
         max=10,
         update=update_renderDistance
+    )
+    icon_fill_light: FloatProperty(
+        name="Fill Light Power",
+        description="The power of the fill light",
+        default=5000,
+        min=0,
+        update=update_light_power
+    )
+    icon_key_light: FloatProperty(
+        name="Fill Key Power",
+        description="The power of the key light",
+        default=7500,
+        min=0,
+        update=update_light_power
+    )
+    icon_rim_light: FloatProperty(
+        name="Rim Key Power",
+        description="The power of the rim light",
+        default=10000,
+        min=0,
+        update=update_light_power
     )
 
     # Planet Editor

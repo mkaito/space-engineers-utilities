@@ -392,8 +392,13 @@ class SEUT_PT_Panel_IconRender(Panel):
 
             if empty is not None:
                 box.prop(scene.seut, 'renderEmptyLocation')
-            if empty is not None:
                 box.prop(scene.seut, 'renderEmptyRotation')
+
+                col = box.column(align=True)
+                col.label(text='Light Power:')
+                col.prop(scene.seut, 'icon_key_light', text="Key Light")
+                col.prop(scene.seut, 'icon_fill_light', text="Fill Light")
+                col.prop(scene.seut, 'icon_rim_light', text="Rim Light")
 
             box = layout.box()
             row = box.row(align=True)

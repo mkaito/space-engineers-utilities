@@ -47,19 +47,19 @@ def setup_icon_render(self, context):
     key_light = bpy.context.view_layer.objects.active
     key_light.parent = empty
     key_light.name = 'Key Light'
-    key_light.data.energy = 7500.0 * scene.seut.renderDistance
+    key_light.data.energy = scene.seut.icon_key_light
 
     bpy.ops.object.light_add(type='POINT', location=(10.0, -10.0, -2.5), rotation=(0.0, 0.0, 0.0))
     fill_light = bpy.context.view_layer.objects.active
     fill_light.parent = empty
     fill_light.name = 'Fill Light'
-    fill_light.data.energy = 5000.0 * scene.seut.renderDistance
+    fill_light.data.energy = scene.seut.icon_fill_light
 
     bpy.ops.object.light_add(type='SPOT', location=(0.0, 15.0, 0.0), rotation=(to_radians(-90), 0.0, 0.0))
     rim_light = bpy.context.view_layer.objects.active
     rim_light.parent = empty
     rim_light.name = 'Rim Light'
-    rim_light.data.energy = 10000.0 * scene.seut.renderDistance
+    rim_light.data.energy = scene.seut.icon_rim_light
 
     parent_collection = empty.users_collection[0]
     if parent_collection != collection:
@@ -116,8 +116,10 @@ def clean_icon_render(self, context):
                 for child in obj.children:
                     if child.data is not None:
                         if child.type == 'CAMERA':
+                            clear_selection(context)
                             bpy.data.cameras.remove(child.data)
                         elif child.type == 'LIGHT':
+                            clear_selection(context)
                             bpy.data.lights.remove(child.data)
 
                 clear_selection(context)
@@ -255,6 +257,9 @@ class SEUT_OT_CopyRenderOptions(Operator):
             scn.seut.renderColorOverlay = scene.seut.renderColorOverlay
             scn.seut.renderResolution = scene.seut.renderResolution
             scn.seut.render_output_type = scene.seut.render_output_type
+            scn.seut.icon_key_light = scene.seut.icon_key_light
+            scn.seut.icon_fill_light = scene.seut.icon_fill_light
+            scn.seut.icon_rim_light = scene.seut.icon_rim_light
 
         seut_report(self, context, 'INFO', True, 'I006', "Icon Render")
 
